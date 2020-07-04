@@ -1,2 +1,5 @@
-# From http://ftp.acc.umu.se/pub/gnome/sources/gtk+/3.14/gtk+-3.14.5.sha256sum
-sha256	ba70f5ccde6646c6d8aa5a6398794b7bcf23fc45af22580a215d258f392dbbe2	gtk+-3.14.5.tar.xz
+# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.22/gtk+-3.22.30.sha256sum
+sha256 a1a4a5c12703d4e1ccda28333b87ff462741dc365131fbc94c218ae81d9a6567  gtk+-3.22.30.tar.xz
+
+# Hash for license file:
+sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING

@@ -4,48 +4,46 @@
 #
 ################################################################################
 
-DOSFSTOOLS_VERSION = 3.0.26
+DOSFSTOOLS_VERSION = 4.1
 DOSFSTOOLS_SOURCE = dosfstools-$(DOSFSTOOLS_VERSION).tar.xz
-DOSFSTOOLS_SITE = http://daniel-baumann.ch/files/software/dosfstools
-DOSFSTOOLS_LICENSE = GPLv3+
+DOSFSTOOLS_SITE = https://github.com/dosfstools/dosfstools/releases/download/v$(DOSFSTOOLS_VERSION)
+DOSFSTOOLS_LICENSE = GPL-3.0+
 DOSFSTOOLS_LICENSE_FILES = COPYING
+DOSFSTOOLS_CONF_OPTS = --enable-compat-symlinks --exec-prefix=/
+HOST_DOSFSTOOLS_CONF_OPTS = --enable-compat-symlinks
 
-# Avoid target dosfstools dependencies, no host-libiconv
-HOST_DOSFSTOOLS_DEPENDENCIES =
-
-DOSFSTOOLS_CFLAGS = $(TARGET_CFLAGS) -D_GNU_SOURCE
-
-ifneq ($(BR2_ENABLE_LOCALE),y)
-DOSFSTOOLS_DEPENDENCIES += libiconv
-DOSFSTOOLS_LDLIBS += -liconv
+ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+DOSFSTOOLS_CONF_OPTS += --with-udev
+DOSFSTOOLS_DEPENDENCIES += udev
+else
+DOSFSTOOLS_CONF_OPTS += --without-udev
 endif
 
-FATLABEL_BINARY = fatlabel
-FSCK_FAT_BINARY = fsck.fat
-MKFS_FAT_BINARY = mkfs.fat
+ifneq ($(BR2_ENABLE_LOCALE),y)
+DOSFSTOOLS_CONF_OPTS += LIBS="-liconv"
+DOSFSTOOLS_DEPENDENCIES += libiconv
+endif
 
-define DOSFSTOOLS_BUILD_CMDS
-	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(DOSFSTOOLS_CFLAGS)" LDLIBS="$(DOSFSTOOLS_LDLIBS)" -C $(@D)
+ifeq ($(BR2_PACKAGE_DOSFSTOOLS_FATLABEL),)
+define DOSFSTOOLS_REMOVE_FATLABEL
+	rm -f $(addprefix $(TARGET_DIR)/sbin/,dosfslabel fatlabel)
 endef
+DOSFSTOOLS_POST_INSTALL_TARGET_HOOKS += DOSFSTOOLS_REMOVE_FATLABEL
+endif
 
-DOSFSTOOLS_INSTALL_BIN_FILES_$(BR2_PACKAGE_DOSFSTOOLS_FATLABEL)+=$(FATLABEL_BINARY)
-DOSFSTOOLS_INSTALL_BIN_FILES_$(BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT)+=$(FSCK_FAT_BINARY)
-DOSFSTOOLS_INSTALL_BIN_FILES_$(BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT)+=$(MKFS_FAT_BINARY)
-
-define DOSFSTOOLS_INSTALL_TARGET_CMDS
-	test -z "$(DOSFSTOOLS_INSTALL_BIN_FILES_y)" || \
-	$(INSTALL) -m 755 $(addprefix $(@D)/,$(DOSFSTOOLS_INSTALL_BIN_FILES_y)) \
-		$(TARGET_DIR)/sbin/
+ifeq ($(BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT),)
+define DOSFSTOOLS_REMOVE_FSCK_FAT
+	rm -f $(addprefix $(TARGET_DIR)/sbin/,fsck.fat dosfsck fsck.msdos fsck.vfat)
 endef
+DOSFSTOOLS_POST_INSTALL_TARGET_HOOKS += DOSFSTOOLS_REMOVE_FSCK_FAT
+endif
 
-define HOST_DOSFSTOOLS_BUILD_CMDS
-	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D)
+ifeq ($(BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT),)
+define DOSFSTOOLS_REMOVE_MKFS_FAT
+	rm -f $(addprefix $(TARGET_DIR)/sbin/,mkfs.fat mkdosfs mkfs.msdos mkfs.vfat)
 endef
+DOSFSTOOLS_POST_INSTALL_TARGET_HOOKS += DOSFSTOOLS_REMOVE_MKFS_FAT
+endif
 
-define HOST_DOSFSTOOLS_INSTALL_CMDS
-	$(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS) PREFIX=$(HOST_DIR)/usr install
-endef
-
-$(eval $(generic-package))
-$(eval $(host-generic-package))
+$(eval $(autotools-package))
+$(eval $(host-autotools-package))

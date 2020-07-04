@@ -4,11 +4,11 @@
 #
 ################################################################################
 
-GST1_PLUGINS_GOOD_VERSION = 1.4.5
+GST1_PLUGINS_GOOD_VERSION = 1.14.4
 GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
-GST1_PLUGINS_GOOD_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-good
+GST1_PLUGINS_GOOD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-good
 GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
-GST1_PLUGINS_GOOD_LICENSE = LGPLv2.1+
+GST1_PLUGINS_GOOD_LICENSE = LGPL-2.1+
 
 GST1_PLUGINS_GOOD_CONF_OPTS = \
 	--disable-valgrind \
@@ -21,19 +21,29 @@ GST1_PLUGINS_GOOD_CONF_OPTS = \
 	--disable-aalib \
 	--disable-aalibtest \
 	--disable-libcaca \
-	--disable-esd \
-	--disable-esdtest
-
+	--disable-qt
 
 # Options which require currently unpackaged libraries
 GST1_PLUGINS_GOOD_CONF_OPTS += \
-	--disable-jack \
 	--disable-libdv \
 	--disable-dv1394 \
-	--disable-shout2 \
-	--disable-taglib
+	--disable-shout2
 
 GST1_PLUGINS_GOOD_DEPENDENCIES = gstreamer1 gst1-plugins-base
+
+ifeq ($(BR2_PACKAGE_JACK2),y)
+GST1_PLUGINS_GOOD_CONF_OPTS += --enable-jack
+GST1_PLUGINS_GOOD_DEPENDENCIES += jack2
+else
+GST1_PLUGINS_GOOD_CONF_OPTS += --disable-jack
+endif
+
+ifeq ($(BR2_PACKAGE_LIBV4L),y)
+GST1_PLUGINS_GOOD_CONF_OPTS += --with-libv4l2
+GST1_PLUGINS_GOOD_DEPENDENCIES += libv4l
+else
+GST1_PLUGINS_GOOD_CONF_OPTS += --without-libv4l2
+endif
 
 ifeq ($(BR2_PACKAGE_ORC),y)
 GST1_PLUGINS_GOOD_CONF_OPTS += --enable-orc
@@ -170,6 +180,20 @@ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ISOMP4),y)
 GST1_PLUGINS_GOOD_CONF_OPTS += --enable-isomp4
 else
 GST1_PLUGINS_GOOD_CONF_OPTS += --disable-isomp4
+endif
+
+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_LAME),y)
+GST1_PLUGINS_GOOD_CONF_OPTS += --enable-lame
+GST1_PLUGINS_GOOD_DEPENDENCIES += lame
+else
+GST1_PLUGINS_GOOD_CONF_OPTS += --disable-lame
+endif
+
+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MPG123),y)
+GST1_PLUGINS_GOOD_CONF_OPTS += --enable-mpg123
+GST1_PLUGINS_GOOD_DEPENDENCIES += mpg123
+else
+GST1_PLUGINS_GOOD_CONF_OPTS += --disable-mpg123
 endif
 
 ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_LAW),y)
@@ -316,17 +340,21 @@ else
 GST1_PLUGINS_GOOD_CONF_OPTS += --disable-gst_v4l2
 endif
 
+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2_PROBE),y)
+GST1_PLUGINS_GOOD_CONF_OPTS += --enable-v4l2-probe
+else
+GST1_PLUGINS_GOOD_CONF_OPTS += --disable-v4l2-probe
+endif
+
 ifeq ($(BR2_PACKAGE_XORG7),y)
 GST1_PLUGINS_GOOD_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXv
 GST1_PLUGINS_GOOD_CONF_OPTS += \
 	--enable-x \
-	--enable-xshm \
 	$(if $(BR2_PACKAGE_XLIB_LIBXFIXES),xlib_libXfixes) \
 	$(if $(BR2_PACKAGE_XLIB_LIBXDAMAGE),xlib_libXdamage)
 else
 GST1_PLUGINS_GOOD_CONF_OPTS += \
-	--disable-x \
-	--disable-xshm
+	--disable-x
 endif
 
 ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_CAIRO),y)

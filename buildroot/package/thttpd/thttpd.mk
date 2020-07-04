@@ -8,7 +8,7 @@ THTTPD_VERSION = 2.25b
 THTTPD_SOURCE = thttpd_$(THTTPD_VERSION).orig.tar.gz
 THTTPD_PATCH = thttpd_$(THTTPD_VERSION)-11.diff.gz
 THTTPD_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/t/thttpd
-THTTPD_LICENSE = BSD-2c
+THTTPD_LICENSE = BSD-2-Clause
 THTTPD_LICENSE_FILES = thttpd.c
 
 ifneq ($(THTTPD_PATCH),)
@@ -42,6 +42,14 @@ endef
 define THTTPD_INSTALL_INIT_SYSV
 	$(INSTALL) -D -m 0755 $(@D)/scripts/thttpd.sh $(TARGET_DIR)/etc/init.d/S90thttpd
 	$(SED) 's:/usr/local/sbin:/usr/sbin:g' $(TARGET_DIR)/etc/init.d/S90thttpd
+endef
+
+define THTTPD_INSTALL_INIT_SYSTEMD
+	$(INSTALL) -D -m 0644 package/thttpd/thttpd.service \
+		$(TARGET_DIR)/usr/lib/systemd/system/thttpd.service
+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/
+	ln -fs ../../../../usr/lib/systemd/system/thttpd.service \
+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/thttpd.service
 endef
 
 $(eval $(autotools-package))

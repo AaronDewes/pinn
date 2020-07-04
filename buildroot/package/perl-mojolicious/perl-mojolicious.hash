@@ -1,3 +1,6 @@
 # retrieved by scancpan from http://cpan.metacpan.org/
-md5    797f28b188dec6e6a899b9b481ee8228 Mojolicious-5.72.tar.gz
-sha256 323218db02890a0b5e5d756f663ad32dbf312d05aa564b06d0a927e4a6a434d4 Mojolicious-5.72.tar.gz
+md5    f1d22e9110f1b51f4be9a40a84391089 Mojolicious-8.04.tar.gz
+sha256 330e919f3caf62e03fdc545dda2e66f772f30192aed6c47e19fd78f67de557fb Mojolicious-8.04.tar.gz
+
+# computed by scancpan
+sha256 19e2e0f2079ea1ce1576eb4ecc0575b33fe45b2b8e71f4aa589d6bedd1da4e0a LICENSE

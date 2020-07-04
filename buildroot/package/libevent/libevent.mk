@@ -4,14 +4,15 @@
 #
 ################################################################################
 
-LIBEVENT_VERSION_MAJOR = 2.0
-LIBEVENT_VERSION = $(LIBEVENT_VERSION_MAJOR).22-stable
-LIBEVENT_SITE = http://downloads.sourceforge.net/project/levent/libevent/libevent-$(LIBEVENT_VERSION_MAJOR)
+LIBEVENT_VERSION = 2.1.8-stable
+LIBEVENT_SITE = https://github.com/libevent/libevent/releases/download/release-$(LIBEVENT_VERSION)
 LIBEVENT_INSTALL_STAGING = YES
-LIBEVENT_LICENSE = BSD-3c, OpenBSD
+LIBEVENT_LICENSE = BSD-3-Clause, OpenBSD
 LIBEVENT_LICENSE_FILES = LICENSE
 # For 0001-Disable-building-test-programs.patch
 LIBEVENT_AUTORECONF = YES
+LIBEVENT_CONF_OPTS = --disable-samples
+HOST_LIBEVENT_CONF_OPTS = --disable-samples --disable-openssl
 
 define LIBEVENT_REMOVE_PYSCRIPT
 	rm $(TARGET_DIR)/usr/bin/event_rpcgen.py
@@ -24,7 +25,7 @@ LIBEVENT_POST_INSTALL_TARGET_HOOKS += LIBEVENT_REMOVE_PYSCRIPT
 endif
 
 ifeq ($(BR2_PACKAGE_OPENSSL),y)
-LIBEVENT_DEPENDENCIES += openssl
+LIBEVENT_DEPENDENCIES += host-pkgconf openssl
 LIBEVENT_CONF_OPTS += --enable-openssl
 else
 LIBEVENT_CONF_OPTS += --disable-openssl

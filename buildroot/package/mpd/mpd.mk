@@ -4,13 +4,14 @@
 #
 ################################################################################
 
-MPD_VERSION_MAJOR = 0.19
-MPD_VERSION = $(MPD_VERSION_MAJOR).8
+MPD_VERSION_MAJOR = 0.20
+MPD_VERSION = $(MPD_VERSION_MAJOR).23
 MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
 MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
-MPD_DEPENDENCIES = host-pkgconf boost libglib2
-MPD_LICENSE = GPLv2+
+MPD_DEPENDENCIES = host-pkgconf boost
+MPD_LICENSE = GPL-2.0+
 MPD_LICENSE_FILES = COPYING
+MPD_AUTORECONF = YES
 
 # Some options need an explicit --disable or --enable
 
@@ -58,6 +59,13 @@ else
 MPD_CONF_OPTS += --disable-bzip2
 endif
 
+ifeq ($(BR2_PACKAGE_MPD_CDIO_PARANOIA),y)
+MPD_DEPENDENCIES += libcdio-paranoia
+MPD_CONF_OPTS += --enable-cdio-paranoia
+else
+MPD_CONF_OPTS += --disable-cdio-paranoia
+endif
+
 ifeq ($(BR2_PACKAGE_MPD_CURL),y)
 MPD_DEPENDENCIES += libcurl
 MPD_CONF_OPTS += --enable-curl
@@ -92,6 +100,12 @@ else
 MPD_CONF_OPTS += --disable-flac
 endif
 
+ifeq ($(BR2_PACKAGE_MPD_HTTPD_OUTPUT),y)
+MPD_CONF_OPTS += --enable-httpd-output
+else
+MPD_CONF_OPTS += --disable-httpd-output
+endif
+
 ifeq ($(BR2_PACKAGE_MPD_JACK2),y)
 MPD_DEPENDENCIES += jack2
 MPD_CONF_OPTS += --enable-jack
@@ -106,6 +120,20 @@ else
 MPD_CONF_OPTS += --disable-lame-encoder
 endif
 
+ifeq ($(BR2_PACKAGE_MPD_LIBMPDCLIENT),y)
+MPD_DEPENDENCIES += libmpdclient
+MPD_CONF_OPTS += --enable-libmpdclient
+else
+MPD_CONF_OPTS += --disable-libmpdclient
+endif
+
+ifeq ($(BR2_PACKAGE_MPD_LIBMMS),y)
+MPD_DEPENDENCIES += libmms
+MPD_CONF_OPTS += --enable-mms
+else
+MPD_CONF_OPTS += --disable-mms
+endif
+
 ifeq ($(BR2_PACKAGE_MPD_LIBNFS),y)
 MPD_DEPENDENCIES += libnfs
 MPD_CONF_OPTS += --enable-nfs
@@ -114,7 +142,7 @@ MPD_CONF_OPTS += --disable-nfs
 endif
 
 ifeq ($(BR2_PACKAGE_MPD_LIBSMBCLIENT),y)
-MPD_DEPENDENCIES += samba
+MPD_DEPENDENCIES += samba4
 MPD_CONF_OPTS += --enable-smbclient
 else
 MPD_CONF_OPTS += --disable-smbclient
@@ -188,6 +216,13 @@ else
 MPD_CONF_OPTS += --disable-pulse
 endif
 
+ifeq ($(BR2_PACKAGE_MPD_SHOUTCAST),y)
+MPD_DEPENDENCIES += libshout
+MPD_CONF_OPTS += --enable-shout
+else
+MPD_CONF_OPTS += --disable-shout
+endif
+
 ifeq ($(BR2_PACKAGE_MPD_SOUNDCLOUD),y)
 MPD_DEPENDENCIES += yajl
 MPD_CONF_OPTS += --enable-soundcloud
@@ -208,7 +243,10 @@ endif
 
 ifeq ($(BR2_PACKAGE_MPD_TREMOR),y)
 MPD_DEPENDENCIES += tremor
-MPD_CONF_OPTS += --with-tremor
+# Help mpd to find tremor in static linking scenarios
+MPD_CONF_ENV += \
+	TREMOR_LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs vorbisidec`"
+MPD_CONF_OPTS += --with-tremor=$(STAGING_DIR)/usr
 endif
 
 ifeq ($(BR2_PACKAGE_MPD_TWOLAME),y)
@@ -219,7 +257,9 @@ MPD_CONF_OPTS += --disable-twolame-encoder
 endif
 
 ifeq ($(BR2_PACKAGE_MPD_UPNP),y)
-MPD_DEPENDENCIES += expat libupnp
+MPD_DEPENDENCIES += \
+	expat \
+	$(if $(BR2_PACKAGE_LIBUPNP),libupnp,libupnp18)
 MPD_CONF_OPTS += --enable-upnp
 else
 MPD_CONF_OPTS += --disable-upnp

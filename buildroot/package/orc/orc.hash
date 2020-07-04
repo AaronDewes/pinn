@@ -1,2 +1,2 @@
-# From http://lists.freedesktop.org/archives/gstreamer-devel/2014-December/050855.html
-sha256	767eaebce2941737b43368225ec54598b3055ca78b4dc50c4092f5fcdc0bdfe7  orc-0.4.23.tar.xz
+# From https://gstreamer.freedesktop.org/src/orc/orc-0.4.27.tar.xz.sha256sum
+sha256 51e53e58fc8158e5986a1f1a49a6d970c5b16493841cf7b9de2c2bde7ce36b93 orc-0.4.27.tar.xz

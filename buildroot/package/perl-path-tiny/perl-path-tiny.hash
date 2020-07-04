@@ -1,3 +1,6 @@
 # retrieved by scancpan from http://cpan.metacpan.org/
-md5    b82cb206a44b7408b11b991001c45e49 Path-Tiny-0.061.tar.gz
-sha256 e8290aac8c0623eea1b20b4a9d9a1be08db7f5a92ea51a514677964f3fa01cca Path-Tiny-0.061.tar.gz
+md5    1a7fbdccc4585074ce4419b7bec0966c Path-Tiny-0.108.tar.gz
+sha256 3c49482be2b3eb7ddd7e73a5b90cff648393f5d5de334ff126ce7a3632723ff5 Path-Tiny-0.108.tar.gz
+
+# computed by scancpan
+sha256 a999b03d2b80e5c7f987289ac835fa2d88cafa9f0df24adf8a1fd21e175acd79 LICENSE

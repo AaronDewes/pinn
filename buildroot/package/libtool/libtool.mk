@@ -4,15 +4,17 @@
 #
 ################################################################################
 
-LIBTOOL_VERSION = 2.4.5
+LIBTOOL_VERSION = 2.4.6
 LIBTOOL_SOURCE = libtool-$(LIBTOOL_VERSION).tar.xz
 LIBTOOL_SITE = $(BR2_GNU_MIRROR)/libtool
 LIBTOOL_INSTALL_STAGING = YES
 LIBTOOL_CONF_ENV = HELP2MAN=true
 LIBTOOL_DEPENDENCIES = host-m4
-LIBTOOL_LICENSE = GPLv2+
+HOST_LIBTOOL_DEPENDENCIES = host-m4
+LIBTOOL_LICENSE = GPL-2.0+
 LIBTOOL_LICENSE_FILES = COPYING
 
+HOST_LIBTOOL_CONF_ENV = MAKEINFO=true
 HOST_LIBTOOL_LIBTOOL_PATCH = NO
 
 # We have a patch that affects libtool.m4, which triggers an autoreconf
@@ -39,5 +41,5 @@ $(eval $(autotools-package))
 $(eval $(host-autotools-package))
 
 # variables used by other packages
-LIBTOOL = $(HOST_DIR)/usr/bin/libtool
-LIBTOOLIZE = $(HOST_DIR)/usr/bin/libtoolize
+LIBTOOL = $(HOST_DIR)/bin/libtool
+LIBTOOLIZE = $(HOST_DIR)/bin/libtoolize

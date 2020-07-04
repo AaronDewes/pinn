@@ -1,3 +1,4 @@
-# From announcement http://www.sudo.ws/pipermail/sudo-announce/2014-May/000132.html
-md5	fcd8d0d9f9f0397d076ee901e242ed39	sudo-1.8.10p3.tar.gz
-sha256	6eda135fa68163108f1c24de6975de5ddb09d75730bb62d6390bda7b04345400	sudo-1.8.10p3.tar.gz
+# From: http://www.sudo.ws/download.html
+sha256 d863d29b6fc87bc784a3223350e2b28a2ff2c4738f0fb8f1c92bb38c3017e679  sudo-1.8.23.tar.gz
+# Locally calculated
+sha256 b6625a7b58e9469a7adfd1732960579a19fe84b3508030f9a31641283e2250b8  doc/LICENSE
