@@ -61,7 +61,7 @@ config BR2_KERNEL_HEADERS_4_18
 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
 
 config BR2_KERNEL_HEADERS_4_19
-	bool "Linux 4.18.x kernel headers"
+	bool "Linux 4.19.x kernel headers"
 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
 
 config BR2_KERNEL_HEADERS_VERSION
