@@ -224,9 +224,9 @@ void reboot()
 QByteArray partdev(const QString &drivedev, int nr)
 {
     if (drivedev.right(1).at(0).isDigit())
-        return drivedev.toAscii()+"p"+QByteArray::number(nr);
+        return drivedev.toLatin1()+"p"+QByteArray::number(nr);
     else
-        return drivedev.toAscii()+QByteArray::number(nr);
+        return drivedev.toLatin1()+QByteArray::number(nr);
 }
 
 /* Returns /sys/class/block path for given drive and optional partition number */
@@ -235,7 +235,7 @@ QByteArray sysclassblock(const QString &drivedev, int partnr)
     QByteArray b;
 
     if (partnr == -1)
-        b = drivedev.toAscii();
+        b = drivedev.toLatin1();
     else
         b = partdev(drivedev, partnr);
 
@@ -316,7 +316,7 @@ QByteArray getDevice(const QString & partuuid)
     QByteArray device;
 
     if (partuuid.left(4)=="/dev")
-        device = partuuid.toAscii();
+        device = partuuid.toLatin1();
     else
     {
         QProcess p;
