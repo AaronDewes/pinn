@@ -1,0 +1,5 @@
+<RCC>
+    <qresource>
+        <file alias="wallpaper.png">wallpaper.png</file>
+    </qresource>
+</RCC>

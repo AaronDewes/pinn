@@ -2311,6 +2311,7 @@ menu "PINN packages"
 	source "package/endorphin/Config.in"
 	source "package/rebootp/Config.in"
 	source "package/recovery/Config.in"
+	source "package/con2fbmap/Config.in"
 endmenu
 
 menu "Real-Time"

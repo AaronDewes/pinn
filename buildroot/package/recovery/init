@@ -11,7 +11,7 @@
 /bin/hostname -F /etc/hostname
 /bin/mount -t tmpfs tmpfs /tmp
 
-modprobe 8188eu
+#modprobe 8188eu
 modprobe 8192cu
 
 # Newer kernel versions can load firmware from /lib/firmware by themselves without help
@@ -36,6 +36,32 @@ echo 2 >/sys/module/vt/parameters/cur_default
 /sbin/getty -L tty3 0 vt100 &
 /sbin/getty -L ttyAMA0 115200 vt100 &
 
+export QWS_DISPLAY="LinuxFb"
+
+present=`tvservice -l | sed -n -e 's|^Display Number \(.*\),.*$|\1| p'`
+for dev in $present; do
+    fitted=`tvservice -n -v $dev 2>/dev/null`
+    if [[ "$fitted" != "" ]]; then
+        case $dev in
+            0)  #7in touchscreen
+                export QWS_DISPLAY="LinuxFb:size=800x480:depth=32:0"
+                break;
+                ;;
+            2)  #normal HDMI0
+                export QWS_DISPLAY="LinuxFb:/dev/fb0"
+                break;
+                ;;
+            7)  #Secondary HDMI1
+                export QWS_DISPLAY="LinuxFb:/dev/fb1"
+                /usr/bin/con2fbmap 2 1
+                /usr/bin/con2fbmap 3 1
+                break;
+                ;;
+        esac
+    fi
+done
+
+
 # Enable syslog
 /etc/init.d/S01logging start > /dev/null
 
@@ -46,7 +72,7 @@ fi
 
 if grep -q vncshare /proc/cmdline; then
     #VNC server AND framebuffer for screen sharing
-    export QWS_DISPLAY="VNC:LinuxFB:size=800x480:depth=32:0"
+    export QWS_DISPLAY="VNC:"$QWS_DISPLAY
 fi
 
 if grep -q ssh /proc/cmdline; then
@@ -55,6 +81,9 @@ if grep -q ssh /proc/cmdline; then
     /bin/mount -t devpts devpts /dev/pts
     . /etc/S50dropbear start &
 fi
+
+
+
 
 
 # Mouse acceleration
