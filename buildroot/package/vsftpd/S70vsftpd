@@ -8,13 +8,13 @@ DAEMON=/usr/sbin/$NAME
 
 case "$1" in
   start)
-	echo -n "Starting $DESC: "
-	start-stop-daemon -S -b -x $NAME
+	printf "Starting $DESC: "
+	start-stop-daemon -S -b -x $DAEMON
 	echo "OK"
 	;;
   stop)
-	echo -n "Stopping $DESC: "
-	start-stop-daemon -K -x $NAME
+	printf "Stopping $DESC: "
+	start-stop-daemon -K -x $DAEMON
 	echo "OK"
 	;;
   restart|force-reload)

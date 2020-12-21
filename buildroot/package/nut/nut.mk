@@ -5,24 +5,25 @@
 ################################################################################
 
 NUT_VERSION_MAJOR = 2.7
-NUT_VERSION = $(NUT_VERSION_MAJOR).2
+NUT_VERSION = $(NUT_VERSION_MAJOR).4
 NUT_SITE = http://www.networkupstools.org/source/$(NUT_VERSION_MAJOR)
-NUT_LICENSE = GPLv2+, GPLv3+ (python scripts), GPL/Artistic (perl client)
+NUT_LICENSE = GPL-2.0+, GPL-3.0+ (python scripts), GPL/Artistic (perl client)
 NUT_LICENSE_FILES = COPYING LICENSE-GPL2 LICENSE-GPL3
+NUT_INSTALL_STAGING = YES
 NUT_DEPENDENCIES = host-pkgconf
 
 # Our patch changes m4 macros, so we need to autoreconf
 NUT_AUTORECONF = YES
 
+# Race condition in tools generation
+NUT_MAKE = $(MAKE1)
+
 # Put the PID files in a read-write place (/var/run is a tmpfs)
 # since the default location (/var/state/ups) maybe readonly.
 NUT_CONF_OPTS = \
 	--with-altpidpath=/var/run/upsd \
+	--with-dev \
 	--without-hal
-
-NUT_CONF_ENV = \
-	GDLIB_CONFIG=$(STAGING_DIR)/usr/bin/gdlib-config \
-	NET_SNMP_CONFIG=$(STAGING_DIR)/usr/bin/net-snmp-config
 
 # For uClibc-based toolchains, nut forgets to link with -lm
 ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
@@ -50,8 +51,11 @@ else
 NUT_CONF_OPTS += --without-cgi
 endif
 
-# libltdl (libtool) is needed for nut-scanner
-ifeq ($(BR2_PACKAGE_LIBTOOL),y)
+# nut-scanner needs libltdl, which is a wrapper arounf dlopen/dlsym,
+# so is not available for static-only builds.
+# There is no flag to directly enable/disable nut-scanner, it's done
+# via the --enable/disable-libltdl flag.
+ifeq ($(BR2_STATIC_LIBS):$(BR2_PACKAGE_LIBTOOL),:y)
 NUT_DEPENDENCIES += libtool
 NUT_CONF_OPTS += --with-libltdl
 else
@@ -74,7 +78,9 @@ endif
 
 ifeq ($(BR2_PACKAGE_NETSNMP),y)
 NUT_DEPENDENCIES += netsnmp
-NUT_CONF_OPTS += --with-snmp
+NUT_CONF_OPTS += \
+	--with-snmp \
+	--with-net-snmp-config=$(STAGING_DIR)/usr/bin/net-snmp-config
 else
 NUT_CONF_OPTS += --without-snmp
 endif

@@ -1,2 +1,5 @@
-# From https://mail-archives.apache.org/mod_mbox/subversion-dev/201412.mbox/%3C548F4EEB.7030601@apache.org%3E
-sha1	bb3cd135bbd856e7f0f2d59313f075b9bbec9848	subversion-1.7.19.tar.gz
+# From https://www.apache.org/dist/subversion/subversion-1.14.0.tar.bz2.sha512
+sha512  af6b706fdc91f7ab292fce9d9de582da306fd11e92767dc852687e71a6a8b65bb867fa70d5afd7f76a46005acb1b3c2d3193e690def48cd26875b3a7851cd13b  subversion-1.14.0.tar.bz2
+
+# Locally calculated
+sha256  484aff0cfbb81155a10f903ed756e27e9fc65578c245a295bae295c4bb51eaad  LICENSE

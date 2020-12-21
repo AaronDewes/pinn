@@ -7,8 +7,12 @@
 CA_CERTIFICATES_VERSION = 20190110
 CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
 CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20190513T145054Z/pool/main/c/ca-certificates
-CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python
-CA_CERTIFICATES_LICENSE = GPLv2+ (script), MPLv2.0 (data)
+CA_CERTIFICATES_DEPENDENCIES = host-openssl
+# ca-certificates can be built with either python 2 or python 3
+# but it must be at least python 2.7
+CA_CERTIFICATES_DEPENDENCIES += \
+	$(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
+CA_CERTIFICATES_LICENSE = GPL-2.0+ (script), MPL-2.0 (data)
 CA_CERTIFICATES_LICENSE_FILES = debian/copyright
 
 define CA_CERTIFICATES_BUILD_CMDS
@@ -33,12 +37,11 @@ define CA_CERTIFICATES_INSTALL_TARGET_CMDS
 	done >$(@D)/ca-certificates.crt
 
 	# Create symlinks to the certificates by their hash values
-	$(HOST_DIR)/usr/bin/c_rehash $(TARGET_DIR)/etc/ssl/certs
+	$(HOST_DIR)/bin/c_rehash $(TARGET_DIR)/etc/ssl/certs
 
 	# Install the certificates bundle
 	$(INSTALL) -D -m 644 $(@D)/ca-certificates.crt \
-	$(TARGET_DIR)/etc/ssl/certs/ca-certificates.crt
-
+		$(TARGET_DIR)/etc/ssl/certs/ca-certificates.crt
 endef
 
 $(eval $(generic-package))
