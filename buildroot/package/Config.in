@@ -2312,6 +2312,7 @@ menu "PINN packages"
 	source "package/rebootp/Config.in"
 	source "package/recovery/Config.in"
 	source "package/con2fbmap/Config.in"
+	source "package/compositor/Config.in"
 endmenu
 
 menu "Real-Time"
