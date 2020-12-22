@@ -1,0 +1,9 @@
+config BR2_PACKAGE_ENDORPHIN
+        bool "endorphin"
+    select BR2_PACKAGE_QT5
+    select BR2_PACKAGE_QT5_WEBKIT
+    select BR2_PACKAGE_QT5_GIF
+    select BR2_PACKAGE_QT5_QTJPEG
+    select BR2_PACKAGE_QT5_QTPNG
+        help
+          Endorphin web browser

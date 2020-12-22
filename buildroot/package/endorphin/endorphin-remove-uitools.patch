@@ -1,0 +1,43 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -18,9 +18,6 @@ find_package(Qt5UiTools)
+ find_package(Qt5LinguistTools REQUIRED)
+ find_package(Qt5Script REQUIRED)
+ 
+-if(NOT Qt5UiTools_FOUND)
+-	add_definitions(-DQT_NO_UITOOLS)
+-endif()
+ set(EXECUTABLE_OUTPUT_PATH ../)
+ set(CMAKE_INCLUDE_CURRENT_DIR ON)
+ 
+@@ -39,6 +36,7 @@ endif()
+ 
+ add_definitions(-DGITVERSION=\"\\\"${GIT_REV}\\\"\")
+ add_definitions(-DGITCHANGENUMBER=${GIT_CHANGENUMBER})
++add_definitions(-DQT_NO_UITOOLS)
+ # Add all files
+ set(Endorphin_SRCS
+ 	aboutdialog.cpp
+@@ -228,8 +226,4 @@ qt5_use_modules(endorphin WebKit)
+ qt5_use_modules(endorphin Network)
+ qt5_use_modules(endorphin WebKitWidgets)
+ qt5_use_modules(endorphin PrintSupport)
+-
+-if(Qt5UiTools_FOUND)
+-	qt5_use_modules(endorphin UiTools)
+-endif()
+ qt5_use_modules(endorphin Script)
+diff --git a/src/webpage.cpp b/src/webpage.cpp
+--- a/src/webpage.cpp
++++ b/src/webpage.cpp
+@@ -38,7 +38,9 @@
+ #include <qnetworkrequest.h>
+ #include <qsettings.h>
+ #include <qwebframe.h>
++#if !defined(QT_NO_UITOOLS)
+ #include <QUiLoader>
++#endif
+ 
+ #include <qwebelement.h>
+

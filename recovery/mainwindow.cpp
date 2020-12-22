@@ -1981,7 +1981,7 @@ void MainWindow::startBrowser()
     QString lang = LanguageDialog::instance("en", "gb")->currentLanguage();
     if (lang == "gb" || lang == "us" || lang == "ko" || lang == "")
         lang = "en";
-    _proc->start("arora -lang "+lang+" "+HOMEPAGE);
+    _proc->start("endorphin -lang "+lang+" "+HOMEPAGE);
 }
 
 void MainWindow::on_list_doubleClicked(const QModelIndex &index)
@@ -4560,7 +4560,7 @@ void MainWindow::on_actionInfo_triggered()
         QString lang = LanguageDialog::instance("en", "gb")->currentLanguage();
         if (lang == "gb" || lang == "us" || lang == "ko" || lang == "")
             lang = "en";
-        _proc->start("arora -lang "+lang+" "+m.value("url").toString());
+        _proc->start("endorphin -lang "+lang+" "+m.value("url").toString());
     }
 }
 
@@ -4590,7 +4590,7 @@ void MainWindow::on_actionInfoInstalled_triggered()
         QString lang = LanguageDialog::instance("en", "gb")->currentLanguage();
         if (lang == "gb" || lang == "us" || lang == "ko" || lang == "")
             lang = "en";
-        _proc->start("arora -lang "+lang+" "+m.value("url").toString());
+        _proc->start("endorphin -lang "+lang+" "+m.value("url").toString());
     }
 }
 
